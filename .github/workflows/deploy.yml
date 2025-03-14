@@ -43,4 +43,9 @@ jobs:
             sudo docker stop nextjs-app || true
             sudo docker rm nextjs-app || true
             sudo docker load -i /home/ubuntu/nextjs-app.tar  # Load image from tar file
-            sudo docker run -d -p 3000:3000 --name nextjs-app nextjs-app
+            sudo docker run -d -p 3000:3000 --name nextjs-app \
+              -e NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+              -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
+              -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+              -e NEXTAUTH_URL="http://${{ secrets.AWS_HOST }}:3000" \
+              nextjs-app
